@@ -1,0 +1,36 @@
+<html layout:decorator="layout/base">
+	<section layout:fragment="content">		
+
+		<h1>Users</h1>		    	
+		
+			<table  th:if="${! #sets.isEmpty(users)}">
+			
+				<tr><th>email</th><th>role</th></tr>
+				
+				<tr th:each="u : ${users}">
+					<td th:text="${u.username}"> email </td>
+					<td th:text="${u.role}"> role </td>
+					<td><a class="btn red" th:href="@{/admin/reset_pass_user/{id}(id=${u.id})}">reset password</a></td>
+					<td><a class="btn red" th:href="@{/admin/delete_user/{id}(id=${u.id})}">delete</a></td>
+				</tr>
+				
+			</table>
+		
+		
+		<br/>
+		<div class="row">
+      		<div class="col s4"><h4 class="right">Create new user:</h4></div>
+      		<form  action="#" th:action="@{/admin/createuser}" th:object="${user}" method="post">
+      		
+	      		<div class="col s4"><input type="text" th:field="*{username}"  	 	placeholder="email" /></div>
+	      		<div class="col s4"><input class="btn red" type="submit" value="Submit" /></div>
+      		</form>
+      		
+      	</div>
+		
+		
+				
+				
+				
+	</section>
+</html>

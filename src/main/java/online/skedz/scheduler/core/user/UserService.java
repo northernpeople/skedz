@@ -90,5 +90,10 @@ public class UserService implements UserDetailsService{
 				);
 	}
 
+	public User save(User u) {
+		return userRepo.saveAndFlush(u);
+		
+	}
+
 	
 }

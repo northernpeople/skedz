@@ -1,5 +1,6 @@
 package online.skedz.scheduler.core.user;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,11 +25,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import online.skedz.scheduler.core.business.ServiceType;
 
 @SuppressWarnings("serial")
+
 @Setter
 @Getter
+@Accessors(chain=true)
 @EqualsAndHashCode(of={"username"})
 @Entity
 public class User implements UserDetails{
@@ -48,9 +52,19 @@ public class User implements UserDetails{
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
+	private LocalDateTime emailVerified = LocalDateTime.MAX;
+	private String verificationCode;
+	private LocalDateTime createdDate;
+	
+	public void verifyEmail(LocalDateTime emailVerified) {
+		this.emailVerified = emailVerified;
+	}
+	
 	@PrePersist
 	void init() {
-		this.id = UUID.randomUUID(); 
+		this.id = UUID.randomUUID();
+		createdDate = LocalDateTime.now();
+		verificationCode = UUID.randomUUID().toString();
 	}
 	
 	@ManyToMany // owner
@@ -58,35 +72,32 @@ public class User implements UserDetails{
 
 
 	@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.name()));
-        return authorities;
-    }
-
-	@Override
-	public String getUsername() {
-		return username;
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.add(new SimpleGrantedAuthority(role.toString()));
+		return authorities;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public boolean isEnabled() {
-		return true;
+	public boolean isEnabled() {	
+		return emailVerified.isBefore(LocalDateTime.now());
 	}
-	
 }

@@ -1,0 +1,42 @@
+<nav>
+    <div class="nav-wrapper   cyan lighten-2">
+      <ul id="nav-mobile" class="right">
+        
+        <li><a th:href="@{/route}"><i class="large material-icons">home</i></a></li>
+        
+        
+        <li> 
+        	 <!-- Dropdown Trigger -->
+			<a class='dropdown-button btn-small cyan lighten-1' href='#' data-activates='dropdown1' data-hover='true' data-belowOrigin='true'>
+			  	<span sec:authentication="name">name</span>
+				<span class="" sec:authentication="principal.authorities">[ROLE_USER] </span>
+			</a>
+			
+			  <!-- Dropdown Structure -->
+			  <ul id='dropdown1' class='dropdown-content'>
+			  	<li><a th:href="@{/logout}"><i class="large material-icons">launch</i>sign out</a></li>
+        		<li><a th:href="@{/change_password_form}"><i class="large material-icons">settings</i>password</a></li>
+        		
+        		
+	        		<span sec:authorize="hasRole('ROLE_USER')">
+		        		<li>
+							<a th:href="@{/read/overview/{id}(id=${user_id})}"><i class="large material-icons">link</i>public site</a>
+						</li>
+					</span>
+	
+			  </ul>
+        
+        </li>
+        
+
+      </ul>
+    </div>
+</nav>
+  
+  
+
+
+
+
+
+

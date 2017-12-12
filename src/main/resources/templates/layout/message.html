@@ -1,0 +1,5 @@
+<div class="" th:if="${ ! #sets.isEmpty(messages)}">
+	<ul>
+		<li class="chip amber lighten-3 pulse" th:each="m : ${messages}" th:text="${m}">Message</li>
+	</ul>
+</div>

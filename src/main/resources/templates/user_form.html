@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<div th:include="layout/style">style</div>
+<title>please sign in</title>
+</head>
+
+<body>
+
+	<div th:include="layout/message">messages</div>
+	
+	<br/>
+	
+	<div class="row">
+		<div class="col s4 offset-s4">
+			<div class="card cyan lighten-2">
+				<form action="#" th:action="@{/login}" th:object="${user}"
+					method="post">
+					<div class="card-content white-text">
+						<span class="card-title">Please sign in:</span> <input type="text"
+							th:field="*{username}" placeholder="email" /> <input
+							type="password" th:field="*{password}" placeholder="password" />
+					</div>
+
+
+					<div class="card-action grey lighten-5">
+						<input class="btn cyan lighten-2" type="submit" value="Submit" /> 
+						<a class="chip white right" th:href="@{/register_form}">register</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+
+</html>
