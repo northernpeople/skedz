@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import online.skedz.scheduler.core.business.Business;
 import online.skedz.scheduler.core.business.BusinessService;
+import online.skedz.scheduler.core.business.ServiceType;
+import online.skedz.scheduler.core.business.repo.ServiceTypeRepo;
 import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
 import online.skedz.scheduler.core.user.UserService;
@@ -27,6 +29,10 @@ public class ScheduledTasks {
 	@Autowired
 	BusinessService businessService;
 	
+	
+	@Autowired
+	ServiceTypeRepo stRepo;
+	
 	@Scheduled(fixedRate = Long.MAX_VALUE)
 	public void setUpTestAccount(){
    		User u = userService.create(new User().setUsername("aa@aa.aa").setPassword("asdfasdf"), Role.ROLE_ADMIN);
@@ -36,6 +42,11 @@ public class ScheduledTasks {
    		Business b  = businessService.create( new Business().setName("AAA towing") );
    		u = userService.addUserToBusiness(b, u);
    		
+   		ServiceType type = stRepo.saveAndFlush(
+				new ServiceType().setName("noodleing").setDuration(5));
+   		
+		b = businessService.addServiceType(b, type);
+
 
 		System.out.println("test admin account set up");
 	}

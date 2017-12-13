@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import online.skedz.scheduler.core.business.BusinessService;
 import online.skedz.scheduler.core.service.email.EmailService;
 import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
@@ -33,6 +34,9 @@ public class Admin {
 
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	BusinessService bService;
 	
 	
 	@RequestMapping(value = "/reset_pass_user/{id}", method = RequestMethod.GET)
@@ -78,10 +82,20 @@ public class Admin {
 	
 	
 	@RequestMapping("/main")
-	public String main(Model m){
+	public String main(Model m, Principal principal){
+		User current = userService.byUserName(principal.getName());
+		m.addAttribute("service_types", current.getBusiness().getServicesProvided());
 		m.addAttribute("user", new User());
 		m.addAttribute("users", userService.findAll());
 		return "admin/main";
+	}
+	
+	@RequestMapping(value = "/delete_service_type/{id}", method = RequestMethod.GET)
+	public String deleteServiceType(@PathVariable("id") UUID id, Principal principal){
+		User current = userService.byUserName(principal.getName());
+		bService.deleteServiceType(current.getBusiness(), bService.byId(id));
+
+		return "redirect:/admin/main";
 	}
 
 }

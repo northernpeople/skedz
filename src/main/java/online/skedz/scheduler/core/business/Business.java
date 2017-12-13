@@ -26,7 +26,7 @@ public class Business {
 	@OneToMany(mappedBy="business")
 	private Set<User> team = new HashSet<>();
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	private Set<ServiceType> servicesProvided = new HashSet<>();
 	
 	@PrePersist

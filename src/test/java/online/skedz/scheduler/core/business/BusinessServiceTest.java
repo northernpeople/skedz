@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import online.skedz.scheduler.core.business.repo.BusinessRepo;
+import online.skedz.scheduler.core.business.repo.ServiceTypeRepo;
 import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
 import online.skedz.scheduler.core.user.UserRepository;
@@ -21,30 +23,31 @@ public class BusinessServiceTest {
 	BusinessRepo bRepo;
 	
 	@Autowired
+	ServiceTypeRepo stRepo;
+	
+	@Autowired
 	UserRepository uRepo;
 	
 	@Autowired
 	BusinessService service;
 	
+	ServiceType type;
 	Business b;
-	User u;
 	
 	@Before
 	public void init(){
-		b = new Business();
-		b.setName("wankers");
-		b = bRepo.saveAndFlush(b);
-		u = new User();
-		u.setUsername("a@a.a");
-		u.setPassword("asdfasdfsadf");
-		u.setRole(Role.ROLE_ADMIN);
-		u = uRepo.saveAndFlush(u);
+		b = bRepo.saveAndFlush(
+				new Business().setName("wankers"));
+		type = stRepo.saveAndFlush(
+				new ServiceType().setName("noodleing").setDuration(5));
 	}
+	
 	@Test
-	public void shouldAddUserToBusiness(){
-		b = service.addUserToBusiness(b, u);
-		b = bRepo.findOneWithTeam(b.getId());
-		Assert.assertTrue("should contain user", b.getTeam().contains(u));;
+	public void shouldAddServiceType(){
+		b = service.addServiceType(b, type);
+		b = bRepo.findOne(b.getId());
+		Assert.assertTrue(b.getServicesProvided().contains(type));
 	}
+	
 
 }
