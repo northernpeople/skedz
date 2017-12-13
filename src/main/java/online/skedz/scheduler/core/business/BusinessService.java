@@ -12,12 +12,9 @@ public class BusinessService {
 	@Autowired
 	BusinessRepo bRepo;
 
-	public Business addUser(Business b, User u){
+	public Business create(Business b) {
 		Assert.notNull(b, "business cannot be null");
-		Assert.notNull(u, "user cannot be null");
-		Assert.notNull(b.getId(), "business must have persistent id");
-		Assert.notNull(u.getId(), "user must have persistent id");
-		b.getTeam().add(u);
+		Assert.notNull(b.getName(), "business must have name");
 		return bRepo.saveAndFlush(b);
 	}
 

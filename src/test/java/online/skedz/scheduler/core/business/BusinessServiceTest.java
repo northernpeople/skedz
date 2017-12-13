@@ -42,7 +42,7 @@ public class BusinessServiceTest {
 	}
 	@Test
 	public void shouldAddUserToBusiness(){
-		b = service.addUser(b, u);
+		b = service.addUserToBusiness(b, u);
 		b = bRepo.findOneWithTeam(b.getId());
 		Assert.assertTrue("should contain user", b.getTeam().contains(u));;
 	}

@@ -1,5 +1,6 @@
 package online.skedz.scheduler.web.controller;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +33,7 @@ public class Admin {
 
 	@Autowired
 	EmailService emailService;
+	
 	
 	@RequestMapping(value = "/reset_pass_user/{id}", method = RequestMethod.GET)
     public String resetPassword (@PathVariable("id") UUID id, RedirectAttributes model) {
@@ -55,14 +58,21 @@ public class Admin {
 	}
 	
 	@RequestMapping(value = "/createuser", method = RequestMethod.POST)
-	public String createUser(@Valid User candidate, Errors errors, RedirectAttributes model) {
+	public String createUser(@Valid User candidate, Errors errors, RedirectAttributes model, Principal principal) {
 		String tempPassword = UUID.randomUUID().toString().replaceAll("-", "");
+		
 		candidate.setPassword(tempPassword);
 		
-		userService.create(candidate, Role.ROLE_USER);
+		candidate = userService.create(candidate, Role.ROLE_USER);
+		User current = userService.byUserName(principal.getName());
+		userService.addUserToBusiness(current.getBusiness(), candidate);
 		
-		emailService.send(candidate.getUsername(), "Your account is ready", "Use the following temporary password: "+ tempPassword);
-		model.addFlashAttribute("messages", Arrays.asList("Account created"));
+		emailService.send(candidate.getUsername(), 
+				"You have been invited to " + current.getBusiness().getName(), 
+				"Please follow this link: "
+				+ "http://localhost:8080/verifyEmail/"+candidate.getVerificationCode()
+				+ " and use this temporary password: "+ tempPassword);
+		model.addFlashAttribute("messages", Arrays.asList("Account invited"));
 		return "redirect:/admin/main";
 	}
 	

@@ -13,6 +13,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -27,6 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import online.skedz.scheduler.core.business.Business;
 import online.skedz.scheduler.core.business.ServiceType;
 
 @SuppressWarnings("serial")
@@ -50,6 +52,9 @@ public class User implements UserDetails{
 	@NotNull
 	@Size(min=7, max=255)
 	private String password;
+	
+	@ManyToOne
+	private Business business;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;

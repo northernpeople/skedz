@@ -18,9 +18,11 @@ public class User {
 	@Autowired
 	UserService userService;
 	
+	
+	
 	@GetMapping(value = "/main")
 	public String main(Model m, Principal p){
-		m.addAttribute("user_id", userService.byUserName(p.getName()).getId());
+		m.addAttribute("user", userService.byUserName(p.getName()));
 		return "user/main";	
 	}
 }

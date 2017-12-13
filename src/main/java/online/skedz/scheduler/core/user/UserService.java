@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
+import online.skedz.scheduler.core.business.Business;
 
 
 
@@ -33,6 +36,16 @@ public class UserService implements UserDetailsService{
 
 	public List<User> findAll() {
 		return userRepo.findAll();
+	}
+	
+	public User addUserToBusiness(Business b, User u){
+		Assert.notNull(b, "business cannot be null");
+		Assert.notNull(u, "user cannot be null");
+		Assert.notNull(b.getId(), "business must have persistent id");
+		Assert.notNull(u.getId(), "user must have persistent id");
+		b.getTeam().add(u);
+		u.setBusiness(b);
+		return userRepo.saveAndFlush(u);
 	}
 	
 	/**

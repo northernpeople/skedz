@@ -7,10 +7,14 @@ import java.util.UUID;
 import javax.persistence.*;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import online.skedz.scheduler.core.user.User;
 
 @Setter
 @Getter
+@Accessors(chain=true)
+
+
 @Entity
 public class Business {
 	
@@ -19,7 +23,7 @@ public class Business {
 	
 	private String name;
 
-	@OneToMany
+	@OneToMany(mappedBy="business")
 	private Set<User> team = new HashSet<>();
 	
 	@OneToMany

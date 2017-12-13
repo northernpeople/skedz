@@ -18,9 +18,9 @@
         		<li><a th:href="@{/change_password_form}"><i class="large material-icons">settings</i>password</a></li>
         		
         		
-	        		<span sec:authorize="hasRole('ROLE_USER')">
+	        		<span sec:authorize="hasRole('ROLE_ADMIN')">
 		        		<li>
-							<a th:href="@{/read/overview/{id}(id=${user_id})}"><i class="large material-icons">link</i>public site</a>
+							<a th:href="@{/admin/main}"><i class="large material-icons">link</i>admin page</a>
 						</li>
 					</span>
 	

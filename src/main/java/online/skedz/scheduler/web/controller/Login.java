@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
 import online.skedz.scheduler.core.user.UserService;
-import online.skedz.scheduler.web.command.PasswordChange;
+import online.skedz.scheduler.web.command.ChangePassword;
 
 
 
@@ -37,7 +37,7 @@ public class Login{
 		User current = userService.byUserName(principal.getName());
 		switch(current.getRole()){
 			case ROLE_ADMIN:
-				return "redirect:/admin/main";
+				return "redirect:/user/main";
 			case ROLE_USER:
 				return "redirect:/user/main";
 			default:
@@ -53,12 +53,12 @@ public class Login{
 	
 	@RequestMapping(path="/change_password_form", method = RequestMethod.GET)
 	public String changePasswordForm(Model model){
-		model.addAttribute("pass_request", new PasswordChange());
+		model.addAttribute("pass_request", new ChangePassword());
 		return "change_password_form";
 	}
 	
 	@RequestMapping(path="/change_password", method=RequestMethod.POST)
-	public String changePassword(@Valid @ModelAttribute("pass_request") PasswordChange changeRequest, Errors errors, Model model){
+	public String changePassword(@Valid @ModelAttribute("pass_request") ChangePassword changeRequest, Errors errors, Model model){
 		if(errors.hasErrors()){
 			model.addAttribute("pass_request", changeRequest);
 			return "change_password_form";		
