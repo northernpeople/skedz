@@ -1,5 +1,6 @@
 package online.skedz.scheduler.core.user;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
 
 
 
@@ -47,6 +49,13 @@ public class UserService implements UserDetailsService{
 		}	
 		return null;
 	}
+	
+	public User verifyEmail(String verificationCode){
+		User user = userRepo.findOneByVerificationCode(verificationCode);
+		user.setEmailVerified(LocalDateTime.now());
+		return userRepo.saveAndFlush(user);
+	}
+
 	
 
 	public boolean usernameTaken(User user) {

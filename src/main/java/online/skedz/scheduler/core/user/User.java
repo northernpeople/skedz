@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import online.skedz.scheduler.core.business.ServiceType;
 
@@ -33,6 +34,7 @@ import online.skedz.scheduler.core.business.ServiceType;
 @Setter
 @Getter
 @Accessors(chain=true)
+@ToString
 @EqualsAndHashCode(of={"username"})
 @Entity
 public class User implements UserDetails{
@@ -98,6 +100,7 @@ public class User implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {	
+		System.out.println(emailVerified.isBefore(LocalDateTime.now()));
 		return emailVerified.isBefore(LocalDateTime.now());
 	}
 }

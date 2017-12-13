@@ -44,28 +44,6 @@ public class Login{
 				return "redirect:/login";	
 		}	
 	}
-	
-	@RequestMapping(value = "/register_form", method = RequestMethod.GET)
-	public String registerForm(Model m){
-		m.addAttribute("registration_request", new User());
-		return "register_form";	
-	}
-	
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String register(@Valid @ModelAttribute("registration_request") User user, Errors errors, RedirectAttributes m){
-		if(errors.hasErrors()){
-			m.addAttribute("registration_request", user);
-			return "register_form";
-		}
-		if(userService.usernameTaken(user)){
-			errors.rejectValue("username", "Match", "username taken");
-			m.addAttribute("registration_request", user);
-			return "register_form";
-		}
-		userService.create(user, Role.ROLE_USER);
-		m.addFlashAttribute("messages", Arrays.asList("You have been successfully registered"));
-		return "redirect:/login";
-	}
 
 	@GetMapping(path = {"/login", "/"})
 	public String userForm(Model model) {
