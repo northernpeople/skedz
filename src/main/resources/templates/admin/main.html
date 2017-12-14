@@ -2,51 +2,58 @@
 	<section layout:fragment="content">		
 
 
+<ul class="collapsible" data-collapsible="accordion">
+    <li>
+      <div class="collapsible-header active"><i class="material-icons">person</i>Users</div>
+      <div class="collapsible-body">    
+	      <ul th:if="${! #sets.isEmpty(users)}" class="collapsible popout" data-collapsible="accordion">
+			<li th:each="u : ${users}">
+		      <div th:text="| ${u.username} ${u.role} |" class="collapsible-header"></div>
+		      <div class="collapsible-body"><span>
+		      	<a class="btn red" th:href="@{/admin/reset_pass_user/{id}(id=${u.id})}">reset password</a>
+		      	<a class="btn red" th:href="@{/admin/delete_user/{id}(id=${u.id})}">delete</a>
+		      	</span></div>
+		    </li>
+		    <li>
+		   	 	<div class="collapsible-header"><i class="material-icons">add</i>Add new</div>
+		      	<div class="collapsible-body"><span>
+		      		<form  action="#" th:action="@{/admin/createuser}" th:object="${user}" method="post">
+			      		<div><input type="text" th:field="*{username}"  placeholder="email" /></div>
+			      		<div><input class="btn red" type="submit" value="Submit" /></div>
+		      		</form>
+		      	</span></div>
+		    </li>
+		</ul>
+      </div>
+    </li>
 
-		<h1>Users</h1>		    	
-		
-			<table  th:if="${! #sets.isEmpty(users)}">
-			
-				<tr><th>email</th><th>role</th></tr>
-				
-				<tr th:each="u : ${users}">
-					<td th:text="${u.username}"> email </td>
-					<td th:text="${u.role}"> role </td>
-					<td><a class="btn red" th:href="@{/admin/reset_pass_user/{id}(id=${u.id})}">reset password</a></td>
-					<td><a class="btn red" th:href="@{/admin/delete_user/{id}(id=${u.id})}">delete</a></td>
-				</tr>
-				
-			</table>
-		
-		
-		<br/>
-		<div class="row">
-      		<div class="col s4"><h4 class="right">Create new user:</h4></div>
-      		<form  action="#" th:action="@{/admin/createuser}" th:object="${user}" method="post">
-      		
-	      		<div class="col s4"><input type="text" th:field="*{username}"  	 	placeholder="email" /></div>
-	      		<div class="col s4"><input class="btn red" type="submit" value="Submit" /></div>
-      		</form>
-      		
-      	</div>
-      	
-      	<h1>Services</h1>
-      	
-      	<table  th:if="${! #sets.isEmpty(service_types)}">
-			
-				<tr><th>name</th><th>duration</th></tr>
-				
-				<tr th:each="t : ${service_types}">
-					<td th:text="${t.name}"> name </td>
-					<td th:text="${t.duration}"> duration </td>
-					<td><a class="btn red" th:href="@{/admin/edit_service_type/{id}(id=${t.id})}">edit</a></td>
-					<td><a class="btn red" th:href="@{/admin/delete_service_type/{id}(id=${t.id})}">stop offering</a></td> 
-				</tr>
-				
-		</table>
-		
-		
-				
+ 	<li>
+      <div class="collapsible-header"><i class="material-icons">filter_drama</i>Services</div>
+      <div class="collapsible-body">
+      	<ul th:if="${! #sets.isEmpty(service_types)}" class="collapsible popout" data-collapsible="accordion">
+			<li th:each="t : ${service_types}">
+      			<div th:text="| ${t.name} ${t.duration} |" class="collapsible-header"></div>
+			    <div class="collapsible-body"><span>
+			      	<a class="btn red" th:href="@{/admin/edit_service_type/{id}(id=${t.id})}">edit</a>
+			      	<a class="btn red" th:href="@{/admin/delete_service_type/{id}(id=${t.id})}">stop offering</a>
+			     </span></div>
+    		</li>
+    		<li>
+    			<div  class="collapsible-header"><i class="material-icons">add</i>Add new</div>
+    			<div class="collapsible-body"><span>
+	    			<form  action="#" th:action="@{/admin/create_service_type}" th:object="${new_service_type}" method="post">
+		      	
+			      		<div><input type="text" th:field="*{name}"  	 	placeholder="name" /></div>
+			      		<div><input type="number" th:field="*{duration}"  	placeholder="name" /></div>			      		
+			      		<div><input class="btn red" type="submit" value="Submit" /></div>
+		      		</form>
+    			</span></div>
+    			
+    		</li>
+    	</ul>	
+      </div>
+    </li>
+</ul>
 				
 				
 	</section>

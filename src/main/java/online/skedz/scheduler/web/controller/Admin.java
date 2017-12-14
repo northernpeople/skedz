@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import online.skedz.scheduler.core.business.BusinessService;
+import online.skedz.scheduler.core.business.ServiceType;
 import online.skedz.scheduler.core.service.email.EmailService;
 import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
@@ -80,10 +81,21 @@ public class Admin {
 		return "redirect:/admin/main";
 	}
 	
+	@RequestMapping(value = "/create_service_type", method = RequestMethod.POST)
+	public String createServiceType(@Valid ServiceType type, Errors errors, RedirectAttributes model, Principal p){
+		
+		
+		User current = userService.byUserName(p.getName());
+		type = bService.create(type);
+		bService.addServiceType(current.getBusiness(), type);
+		return "redirect:/admin/main";
+	}
+	
 	
 	@RequestMapping("/main")
 	public String main(Model m, Principal principal){
 		User current = userService.byUserName(principal.getName());
+		m.addAttribute("new_service_type", new ServiceType());
 		m.addAttribute("service_types", current.getBusiness().getServicesProvided());
 		m.addAttribute("user", new User());
 		m.addAttribute("users", userService.findAll());

@@ -38,6 +38,11 @@ public class BusinessService {
 
 	}
 	
+	public ServiceType create(ServiceType type){
+		Assert.notNull(type, "type cannot be null");
+		return stRepo.saveAndFlush(type);
+	}
+	
 	public Business create(Business b) {
 		Assert.notNull(b, "business cannot be null");
 		Assert.notNull(b.getName(), "business must have name");
