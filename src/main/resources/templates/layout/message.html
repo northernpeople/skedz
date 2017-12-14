@@ -1,5 +1,10 @@
 <div class="" th:if="${ ! #sets.isEmpty(messages)}">
 	<ul>
-		<li class="chip amber lighten-3 pulse" th:each="m : ${messages}" th:text="${m}">Message</li>
+		<li  th:each="m : ${messages}" th:utext="|${m}|">Message</li>
 	</ul>
 </div>
+
+
+<span th:each="m : ${messages}">
+	<script th:utext="| Materialize.toast('${m}', 10000, 'blue')  |"> </script> 
+</span>
