@@ -16,9 +16,6 @@ import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
 import online.skedz.scheduler.core.user.UserService;
 
-
-
-
 @Component
 public class ScheduledTasks {
 	
@@ -28,7 +25,6 @@ public class ScheduledTasks {
 	
 	@Autowired
 	BusinessService businessService;
-	
 	
 	@Autowired
 	ServiceTypeRepo stRepo;
@@ -46,6 +42,8 @@ public class ScheduledTasks {
 				new ServiceType().setName("noodleing").setDuration(5));
    		
 		b = businessService.addServiceType(b, type);
+		
+		userService.addServiceTypeTo(u, type);
 
 
 		System.out.println("test admin account set up");

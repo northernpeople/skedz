@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import online.skedz.scheduler.core.business.Business;
+import online.skedz.scheduler.core.business.ServiceType;
 
 
 
@@ -36,6 +37,16 @@ public class UserService implements UserDetailsService{
 
 	public List<User> findAll() {
 		return userRepo.findAll();
+	}
+	
+	public User addServiceTypeTo(User u, ServiceType type){
+		Assert.notNull(type, "service cannot be null");
+		Assert.notNull(u, "user cannot be null");
+		Assert.notNull(type.getId(), "service must have persistent id");
+		Assert.notNull(u.getId(), "user must have persistent id");
+		u.getServicesProvided().add(type);
+		type.getProviders().add(u);
+		return userRepo.saveAndFlush(u);
 	}
 	
 	public User addUserToBusiness(Business b, User u){

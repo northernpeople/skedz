@@ -22,8 +22,14 @@ public class User {
 	
 	@GetMapping(value = "/main")
 	public String main(Model m, Principal p){
-		m.addAttribute("user", userService.byUserName(p.getName()));
+		m.addAttribute("current_user", currentUser(p));
 		return "user/main";	
+	}
+
+
+
+	private online.skedz.scheduler.core.user.User currentUser(Principal p) {
+		return userService.byUserName(p.getName());
 	}
 }
 

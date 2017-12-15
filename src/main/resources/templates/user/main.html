@@ -1,7 +1,85 @@
 <html layout:decorator="layout/base">
 	<section layout:fragment="content">		
 			
-		<h1>hi user</h1>
+		<h2 th:text="${current_user.business.name}"></h2>
+
+
+
+<ul class="collapsible popout">
+
+	<li>
+	<div class="collapsible-header active"><i class="material-icons">face</i>Appointments</div>
+    <div class="collapsible-body amber accent-3">upcoming appointments here</div>
+    </li>
+    
+    <li>
+    <div class="collapsible-header"><i class="material-icons">date_range</i>Schedule</div>
+    <div class="collapsible-body purple lighten-1">manage your schedule here</div>
+    </li>
+  
+    <!-- <li>
+      <div class="collapsible-header"><i class="material-icons">face</i>Users</div>
+      <div class="collapsible-body amber accent-3">
+	      <ul th:if="${! #sets.isEmpty(users)}" class="collapsible" data-collapsible="accordion">
+			<li th:each="u : ${users}">
+		      <div th:text="| ${u.username} ${u.role} |" class="collapsible-header"></div>
+		      <div class="collapsible-body"><span>
+		      	<a class="btn red" th:href="@{/admin/reset_pass_user/{id}(id=${u.id})}">reset password</a>
+		      	<a class="btn red" th:href="@{/admin/delete_user/{id}(id=${u.id})}">delete</a>
+		      	</span></div>
+		    </li>
+		    <li>
+		   	 	<div class="collapsible-header"><i class="material-icons">add_circle</i>Add user</div>
+		      	<div class="collapsible-body grey lighten-3">
+		      		<form  action="#" th:action="@{/admin/createuser}" th:object="${user}" method="post">
+			      		<div><input type="text" th:field="*{username}"  placeholder="email" /></div>
+			      		
+			      		<span class="" th:if="${#fields.hasErrors('username')}">
+							<ul>
+								<li class="chip red" th:each="err : ${#fields.errors('username')}" th:text="${err}">err</li>
+							</ul>
+						</span>
+						
+			      		<div>
+			      			<input class="btn red" type="submit" value="Submit" />
+			      			<a class="btn red" th:href="@{/admin/main}">cancel</a>
+			      			
+			      		</div>
+		      		</form>
+		      		
+		      	</div>
+		    </li>
+		</ul>
+      </div>
+    </li>
+ -->
+ 	<li>
+      <div class="collapsible-header"><i class="material-icons">grain</i>Services</div>
+      <div class="collapsible-body blue">
+      	<ul  class="collapsible" data-collapsible="accordion">
+			<li th:each="t : ${current_user.servicesProvided}">
+      			<div th:text="| ${t.name} ${t.duration} |" class="collapsible-header"></div>
+			    <div class="collapsible-body"><span>
+			    	
+			      	<a class="btn red" th:href="@{/admin/delete_service_type/{id}(id=${t.id})}">stop providing</a>
+			     </span></div>
+    		</li>
+    		<li>
+    			<div  class="collapsible-header"><i class="material-icons">add_circle</i>Add service</div>
+    			<div class="collapsible-body grey lighten-3"><span>
+	    			list of service to choose from 
+    			</span></div>
+    			
+    		</li>
+    	</ul>	
+      </div>
+    </li>
+</ul>
+			
+          	
+			
+		
+	
 				
 	</section>
 </html>

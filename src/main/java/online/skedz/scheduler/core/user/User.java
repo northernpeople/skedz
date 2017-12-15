@@ -11,6 +11,7 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -74,7 +75,7 @@ public class User implements UserDetails{
 		verificationCode = UUID.randomUUID().toString();
 	}
 	
-	@ManyToMany // owner
+	@ManyToMany(fetch=FetchType.EAGER) // owner
 	private Set<ServiceType> servicesProvided = new HashSet<>();
 
 
