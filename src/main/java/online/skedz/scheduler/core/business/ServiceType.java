@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import online.skedz.scheduler.core.user.User;
 
@@ -23,6 +24,7 @@ import online.skedz.scheduler.core.user.User;
 @Getter
 @Accessors(chain=true)
 @EqualsAndHashCode(of={"name", "length"})
+@ToString(exclude={"providers"})
 
 @Entity
 public class ServiceType {

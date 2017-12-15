@@ -52,5 +52,9 @@ public class BusinessService {
 	public ServiceType byId(UUID id){
 		return stRepo.findOne(id);
 	}
+	
+	public Business getOneWithTeam(UUID businessId){
+		return bRepo.findOneWithTeam(businessId);
+	}
 
 }

@@ -27,6 +27,7 @@ public class Business {
 	private Set<User> team = new HashSet<>();
 	
 	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn
 	private Set<ServiceType> servicesProvided = new HashSet<>();
 	
 	@PrePersist

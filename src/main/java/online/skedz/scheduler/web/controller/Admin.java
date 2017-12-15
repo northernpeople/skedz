@@ -22,6 +22,7 @@ import online.skedz.scheduler.core.service.email.EmailService;
 import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
 import online.skedz.scheduler.core.user.UserService;
+import online.skedz.scheduler.web.command.InviteUser;
 
 
 
@@ -63,7 +64,13 @@ public class Admin {
 	}
 	
 	@RequestMapping(value = "/createuser", method = RequestMethod.POST)
-	public String createUser(@Valid User candidate, Errors errors, RedirectAttributes model, Principal principal) {
+	public String createUser(@Valid @ModelAttribute("user") InviteUser invitedUser, Errors errors, RedirectAttributes model, Principal principal) {
+		if(errors.hasErrors()){
+			model.addFlashAttribute("messages", Arrays.asList("Doesnt look like a valid email", "Please try again"));
+			return "redirect:/admin/main";
+		}
+		
+		User candidate = new User().setUsername(invitedUser.getUsername());
 		String tempPassword = UUID.randomUUID().toString().replaceAll("-", "");
 		
 		candidate.setPassword(tempPassword);
@@ -77,13 +84,21 @@ public class Admin {
 				"Please follow this link: "
 				+ "http://localhost:8080/verifyEmail/"+candidate.getVerificationCode()
 				+ " and use this temporary password: "+ tempPassword);
-		model.addFlashAttribute("messages", Arrays.asList("Account invited"));
+		
+		model.addFlashAttribute("messages", Arrays.asList("Invitation sent!"));
 		return "redirect:/admin/main";
 	}
 	
+	
+	@RequestMapping(value = "/edit_service_type/{id}", method = RequestMethod.GET)
+	public String editServiceType(@PathVariable("id") UUID serviceTypeId, Model model){
+		model.addAttribute("service_type", bService.byId(serviceTypeId));
+		return "admin/servicetype/edit";
+	}
+	
+	
 	@RequestMapping(value = "/create_service_type", method = RequestMethod.POST)
 	public String createServiceType(@Valid ServiceType type, Errors errors, RedirectAttributes model, Principal p){
-		
 		
 		User current = userService.byUserName(p.getName());
 		type = bService.create(type);
@@ -94,11 +109,12 @@ public class Admin {
 	
 	@RequestMapping("/main")
 	public String main(Model m, Principal principal){
+		System.out.println(m.asMap());
 		User current = userService.byUserName(principal.getName());
-		m.addAttribute("new_service_type", new ServiceType());
+		m.addAttribute("service_type", new ServiceType());
 		m.addAttribute("service_types", current.getBusiness().getServicesProvided());
-		m.addAttribute("user", new User());
-		m.addAttribute("users", userService.findAll());
+		m.addAttribute("user", new InviteUser());
+		m.addAttribute("users", bService.getOneWithTeam(current.getBusiness().getId()).getTeam());
 		return "admin/main";
 	}
 	

@@ -1,0 +1,33 @@
+<html layout:decorator="layout/base">
+	<section layout:fragment="content">	
+
+
+
+
+<form  action="#" th:action="@{/admin/create_service_type}" th:object="${service_type}" method="post">
+		      		
+		      	<h2>Service name</h2>
+		      	
+		      	<input type="hidden" th:field="*{id}" />
+			    <div><input type="text" th:field="*{name}"  	 	placeholder="name" /></div>
+<!-- 			    <div><input type="number" th:field="*{duration}"  	placeholder="name" /></div>	
+ -->			   
+ 				<h2>Duration</h2> 
+			    <p class="range-field">
+      			<input type="range" th:field="*{duration}" id="minutes" min="1" max="480" />
+   				</p>
+    
+    
+    		      		
+			    <div>
+				    <input class="btn red" type="submit" value="Submit" />
+				    <a class="btn red" th:href="@{/admin/main}">cancel</a>
+			    </div>
+</form>
+		      		
+		      		
+		      		
+		      		          	
+				
+	</section>
+</html>
