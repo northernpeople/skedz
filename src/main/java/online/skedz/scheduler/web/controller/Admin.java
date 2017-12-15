@@ -3,6 +3,7 @@ package online.skedz.scheduler.web.controller;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -66,7 +67,9 @@ public class Admin {
 	@RequestMapping(value = "/createuser", method = RequestMethod.POST)
 	public String createUser(@Valid @ModelAttribute("user") InviteUser invitedUser, Errors errors, RedirectAttributes model, Principal principal) {
 		if(errors.hasErrors()){
-			model.addFlashAttribute("messages", Arrays.asList("Doesnt look like a valid email", "Please try again"));
+			model.addFlashAttribute("errors", Arrays.asList("Doesnt look like a valid email", "Example: a_smith@yahoo.com"));
+			model.addFlashAttribute("messages", Arrays.asList("Please try again"));
+
 			return "redirect:/admin/main";
 		}
 		
@@ -99,18 +102,26 @@ public class Admin {
 	
 	@RequestMapping(value = "/create_service_type", method = RequestMethod.POST)
 	public String createServiceType(@Valid ServiceType type, Errors errors, RedirectAttributes model, Principal p){
+		if(errors.hasErrors()){
+			model.addFlashAttribute("errors", errors.getAllErrors().stream().map(e -> e.getDefaultMessage()+ e.getCode()).collect(Collectors.toList()));
+			model.addFlashAttribute("messages", Arrays.asList("Please try again"));
+
+			return "redirect:/admin/main";
+		}
 		
 		User current = userService.byUserName(p.getName());
 		type = bService.create(type);
 		bService.addServiceType(current.getBusiness(), type);
+		
+		model.addFlashAttribute("messages", Arrays.asList(type.getName() +" created/updated."));
 		return "redirect:/admin/main";
 	}
 	
 	
 	@RequestMapping("/main")
 	public String main(Model m, Principal principal){
-		System.out.println(m.asMap());
 		User current = userService.byUserName(principal.getName());
+		m.addAttribute("current_user", current);
 		m.addAttribute("service_type", new ServiceType());
 		m.addAttribute("service_types", current.getBusiness().getServicesProvided());
 		m.addAttribute("user", new InviteUser());

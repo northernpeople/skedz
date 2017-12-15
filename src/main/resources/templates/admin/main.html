@@ -1,11 +1,12 @@
 <html layout:decorator="layout/base">
 	<section layout:fragment="content">		
+        <h2 th:text="${current_user.business.name}"></h2>
 
 
-<ul class="collapsible popout" data-collapsible="accordion">
+<ul class="collapsible popout" data-collapsible="expandable">
     <li>
-      <div class="collapsible-header "><i class="material-icons">person</i>Users</div>
-      <div class="collapsible-body cyan">    
+      <div class="collapsible-header"><i class="material-icons">face</i>Users</div>
+      <div class="collapsible-body amber accent-3">
 	      <ul th:if="${! #sets.isEmpty(users)}" class="collapsible" data-collapsible="accordion">
 			<li th:each="u : ${users}">
 		      <div th:text="| ${u.username} ${u.role} |" class="collapsible-header"></div>
@@ -15,8 +16,8 @@
 		      	</span></div>
 		    </li>
 		    <li>
-		   	 	<div class="collapsible-header"><i class="material-icons">add</i>Add new</div>
-		      	<div class="collapsible-body">
+		   	 	<div class="collapsible-header"><i class="material-icons">add_circle</i>Add user</div>
+		      	<div class="collapsible-body grey lighten-3">
 		      		<form  action="#" th:action="@{/admin/createuser}" th:object="${user}" method="post">
 			      		<div><input type="text" th:field="*{username}"  placeholder="email" /></div>
 			      		
@@ -26,7 +27,11 @@
 							</ul>
 						</span>
 						
-			      		<div><input class="btn red" type="submit" value="Submit" /></div>
+			      		<div>
+			      			<input class="btn red" type="submit" value="Submit" />
+			      			<a class="btn red" th:href="@{/admin/main}">cancel</a>
+			      			
+			      		</div>
 		      		</form>
 		      		
 		      	</div>
@@ -36,19 +41,20 @@
     </li>
 
  	<li>
-      <div class="collapsible-header "><i class="material-icons">grain</i>Services</div>
+      <div class="collapsible-header"><i class="material-icons">grain</i>Services</div>
       <div class="collapsible-body blue">
       	<ul  class="collapsible" data-collapsible="accordion">
 			<li th:each="t : ${service_types}">
       			<div th:text="| ${t.name} ${t.duration} |" class="collapsible-header"></div>
 			    <div class="collapsible-body"><span>
+			    	
 			      	<a class="btn red" th:href="@{/admin/edit_service_type/{id}(id=${t.id})}">edit</a>
 			      	<a class="btn red" th:href="@{/admin/delete_service_type/{id}(id=${t.id})}">stop offering</a>
 			     </span></div>
     		</li>
     		<li>
-    			<div  class="collapsible-header"><i class="material-icons">add</i>Add new</div>
-    			<div class="collapsible-body"><span>
+    			<div  class="collapsible-header"><i class="material-icons">add_circle</i>Add service</div>
+    			<div class="collapsible-body grey lighten-3"><span>
 	    		<form  action="#" th:action="@{/admin/create_service_type}" th:object="${service_type}" method="post">
 		      		
 			      	Service name
@@ -56,11 +62,15 @@
 			      	<input type="hidden" th:field="*{id}" />
 				    <div><input type="text" th:field="*{name}"  	 	placeholder="name" /></div>
 	<!-- 			    <div><input type="number" th:field="*{duration}"  	placeholder="name" /></div>	
-	 -->			   
-	 				Duration
-				    <p class="range-field">
-	      			<input type="range" th:field="*{duration}" id="minutes" min="1" max="480" />
-	   				</p>
+	 -->			  
+		 				<div>
+		 					<i class="material-icons prefix">swap_horiz</i>
+		 					Duration (slide to adjust)
+		 				</div>
+					    <p class="range-field">
+		      			<input type="range" th:field="*{duration}" id="minutes" min="1" max="480" />
+		   				</p>
+		   				
 	     		
 				    <div>
 					    <input class="btn red" type="submit" value="Submit" />

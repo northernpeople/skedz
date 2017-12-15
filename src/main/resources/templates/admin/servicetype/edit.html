@@ -1,28 +1,47 @@
 <html layout:decorator="layout/base">
 	<section layout:fragment="content">	
 
-
-
-
 <form  action="#" th:action="@{/admin/create_service_type}" th:object="${service_type}" method="post">
-		      		
-		      	<h2>Service name</h2>
-		      	
-		      	<input type="hidden" th:field="*{id}" />
-			    <div><input type="text" th:field="*{name}"  	 	placeholder="name" /></div>
-<!-- 			    <div><input type="number" th:field="*{duration}"  	placeholder="name" /></div>	
+
+ 	<div class="row">
+        <div class="col s12">
+          <div class="card blue">
+            <div class="card-content white-text">
+              <span class="card-title" th:text="| Editing service: *{name}, duration: *{duration} minute(s)|">Service name</span>
+              <input type="hidden" th:field="*{id}" />
+              <p>
+              	
+              	<div><input type="text" th:field="*{name}"  	 	placeholder="name" /></div>
+<!-- 			<div><input type="number" th:field="*{duration}"  	placeholder="name" /></div>	
  -->			   
- 				<h2>Duration</h2> 
+ 				<div> Slide to adjust duration</div> 
 			    <p class="range-field">
-      			<input type="range" th:field="*{duration}" id="minutes" min="1" max="480" />
+      				<input type="range" th:field="*{duration}" id="minutes" min="1" max="480" />
    				</p>
+              
+              </p>
+            </div>
+            <div class="card-action">
+               <div>
+				    <input class="btn red" type="submit" value="Submit" />
+				    <a class="btn green" th:href="@{/admin/main}">cancel</a>
+			    </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+		      		
+		      	
+		      	
+		      	
+			    
     
     
     		      		
-			    <div>
-				    <input class="btn red" type="submit" value="Submit" />
-				    <a class="btn red" th:href="@{/admin/main}">cancel</a>
-			    </div>
+			   
 </form>
 		      		
 		      		

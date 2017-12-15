@@ -23,7 +23,7 @@ import online.skedz.scheduler.core.user.User;
 @Setter
 @Getter
 @Accessors(chain=true)
-@EqualsAndHashCode(of={"name", "length"})
+@EqualsAndHashCode(of={"name", "duration"})
 @ToString(exclude={"providers"})
 
 @Entity
@@ -33,7 +33,7 @@ public class ServiceType {
 	private UUID id;
 	
 	@NotNull
-	@Size(min=5, max=255)
+	@Size(min=5, max=255, message="Service name must have between 5 and 255 characters")
 	private String name;
 	
 	@Min(1)
