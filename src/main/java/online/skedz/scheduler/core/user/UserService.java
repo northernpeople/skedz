@@ -49,6 +49,16 @@ public class UserService implements UserDetailsService{
 		return userRepo.saveAndFlush(u);
 	}
 	
+	public User removeServiceTypeFrom(User u, ServiceType type){
+		Assert.notNull(type, "service cannot be null");
+		Assert.notNull(u, "user cannot be null");
+		Assert.notNull(type.getId(), "service must have persistent id");
+		Assert.notNull(u.getId(), "user must have persistent id");
+		u.getServicesProvided().remove(type);
+		type.getProviders().remove(u);
+		return userRepo.saveAndFlush(u);
+	}
+	
 	public User addUserToBusiness(Business b, User u){
 		Assert.notNull(b, "business cannot be null");
 		Assert.notNull(u, "user cannot be null");

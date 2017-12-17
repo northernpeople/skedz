@@ -61,14 +61,19 @@
       			<div th:text="| ${t.name} ${t.duration} |" class="collapsible-header"></div>
 			    <div class="collapsible-body"><span>
 			    	
-			      	<a class="btn red" th:href="@{/admin/delete_service_type/{id}(id=${t.id})}">stop providing</a>
+			      	<a class="btn red" th:href="@{/user/delete_service_type/{id}(id=${t.id})}">stop providing</a>
 			     </span></div>
     		</li>
     		<li>
     			<div  class="collapsible-header"><i class="material-icons">add_circle</i>Add service</div>
-    			<div class="collapsible-body grey lighten-3"><span>
-	    			list of service to choose from 
-    			</span></div>
+    			<div class="collapsible-body grey lighten-3">
+    				<span class="" th:each="t : ${current_user.business.servicesProvided}" >			
+	    				<a class="btn blue" 
+	    					th:if="${ ! current_user.servicesProvided.contains(t)}"
+	    					th:href="@{/user/add_service/{id}(id=${t.id})}" 
+	    					th:text="|Add ${t.name} (${t.duration} minutes)|">Add</a>	
+    				</span>  				
+    			</div>
     			
     		</li>
     	</ul>	

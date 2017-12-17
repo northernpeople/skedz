@@ -43,7 +43,6 @@ public class ScheduledTasks {
    		
 		b = businessService.addServiceType(b, type);
 		
-		userService.addServiceTypeTo(u, type);
 
 
 		System.out.println("test admin account set up");
