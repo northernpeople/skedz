@@ -17,9 +17,11 @@
     <div class="collapsible-body purple lighten-1">
     	<ul  class="collapsible" data-collapsible="accordion">
 	    	<li th:each="wd : ${workdays}">
-			      <div th:text="|From ${wd.beginning} To ${wd.end}|" class="collapsible-header"></div>
+	    	<!-- th:text="${#dates.format(product.availableFrom, 'dd-MMM-yyyy')}" -->
+			      <div th:text="|${wd.beginning.toLocalDate()}  (${wd.beginning.toLocalTime()} - ${wd.end.toLocalTime()})|" 
+			      class="collapsible-header"></div>
 			      <div class="collapsible-body">
-			      	content
+			      	<a class="btn red" th:href="@{/user/delete_workday/{id}(id=${wd.id})}">cancell</a>
 			      </div>
 			</li>
 			<li>
@@ -43,7 +45,7 @@
 						</span>
 						
 			      		<div>
-			      			<input class="btn red" type="submit" value="Submit" />
+			      			<input class="btn green" type="submit" value="Submit" />
 			      			<a class="btn red" th:href="@{/user/main}">cancel</a>
 			      			
 			      		</div>

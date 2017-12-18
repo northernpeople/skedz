@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class WorkdayService {
 				.setEnd(result.getEnd().plusHours(24));
 	}
 	
-	public void deleteWorkday(Workday day){
+	public void deleteWorkday(Workday day){ 
 		Assert.notNull(day, "workday cannot be null");
 		Assert.notNull(day.getId(), "workday must have id");
 		wdRepo.delete(day);
@@ -64,5 +65,9 @@ public class WorkdayService {
 				.sorted( (a, b) -> a.getEnd().compareTo(b.getEnd()))
 				.distinct()
 				.collect(Collectors.toList());
+	}
+
+	public void deleteWorkday(UUID workdayId) {
+		wdRepo.delete(workdayId);
 	}
 }

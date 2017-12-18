@@ -53,6 +53,18 @@ public class User {
 
 		return "redirect:/user/main";
 	}
+	@RequestMapping(value = "/delete_workday/{id}", method = RequestMethod.GET)
+	public String deleteWorkday(@PathVariable("id") UUID workdayId, RedirectAttributes model, Principal p){
+		if(! dayBelongsToUser(workdayId, p)){
+			return "redirect:/user/main";
+		}
+		wdService.deleteWorkday(workdayId);
+		model.addFlashAttribute("messages", Arrays.asList("Day deleted"));
+		return "redirect:/user/main";
+	}
+	private boolean dayBelongsToUser(UUID workdayId, Principal p) {
+		return wdService.getAllWorkdaysOf(currentUser(p)).stream().filter(d -> d.getId().equals(workdayId)).findFirst().isPresent();
+	}
 	
 	
 	@RequestMapping(value = "/add_service/{id}", method = RequestMethod.GET)
