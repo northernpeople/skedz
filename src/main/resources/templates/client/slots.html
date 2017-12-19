@@ -6,19 +6,21 @@
       			<div class="card blue">
       			
       			 	 <div class="card-content white-text">
-              			<span class="card-title"  >slots</span>
+              			<span class="card-title"  >Available time slots</span>
 			         </div>
 			        <div class="card-content">
 			          <p>
 			          <ul class="collapsible" data-collapsible="accordion" >
-					    <li th:each="wd : ${workdays}">
+					    <li th:each="s : ${slots}">
 					      <div class="collapsible-header">
 					      	<i class="material-icons">schedule</i>
-					      	<span th:text="${wd.beginning.toLocalDate()}" ></span>
+					      	<span th:text="${s.beginning}" ></span>
 					      </div>
 					      <div class="collapsible-body">
-						      <a class="btn red" th:href="@{/client/book_slots/{did}/{sid} (did=${wd.id}, sid=${service.id})}">see slots</a>
-						  </div>
+
+							<a class="btn red" th:href="@{/client/confirm_slot/{id} (id=${s.id})}">choose</a>
+		
+ 						  </div>
 					    </li>
 					  </ul>
 					  </p>

@@ -20,7 +20,7 @@ import online.skedz.scheduler.core.business.ServiceType;
 @Getter
 @Accessors(chain=true)
 @ToString
-@EqualsAndHashCode(of={"beginning", "end"})
+@EqualsAndHashCode(of={"beginning"})
 
 @Entity
 public class Appointment {
@@ -32,6 +32,14 @@ public class Appointment {
 	private Workday workday;
 	
 	private LocalDateTime beginning;
+	
+	private LocalDateTime created;
+	private LocalDateTime confirmed = LocalDateTime.MIN;
+
+
+	public void confirm(){
+		this.confirmed = LocalDateTime.now();
+	}
 	
 	LocalDateTime getEnd(){
 		return beginning.plusMinutes(service.getDuration());
@@ -50,6 +58,7 @@ public class Appointment {
 	@PrePersist
 	void init(){
 		this.id = UUID.randomUUID();
+		created = LocalDateTime.now();
 	}
 
 }

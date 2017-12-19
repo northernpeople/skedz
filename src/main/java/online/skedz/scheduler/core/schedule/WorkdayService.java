@@ -3,8 +3,6 @@ package online.skedz.scheduler.core.schedule;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import online.skedz.scheduler.core.business.ServiceType;
+import online.skedz.scheduler.core.schedule.repo.AppointmentRepo;
 import online.skedz.scheduler.core.schedule.repo.WorkdayRepo;
 import online.skedz.scheduler.core.user.User;
 
@@ -21,6 +20,19 @@ public class WorkdayService {
 	
 	@Autowired
 	WorkdayRepo wdRepo;
+	
+	@Autowired
+	AppointmentRepo apRepo;
+	
+	public Appointment createAppointment(Appointment a){
+		Assert.notNull(a.getBeginning(), "begging time cannot be null");
+		Assert.notNull(a.getService(), "service type cannot be null");
+		Assert.notNull(a.getService().getId(), "service type id cannot be null");
+		Assert.notNull(a.getWorkday(), "workday cannot be null");
+		Assert.notNull(a.getWorkday().getId(), "workday id cannot be null");
+
+		return apRepo.saveAndFlush(a);
+	}
 	
 	public Workday createWorkday(Workday day){
 		Assert.notNull(day, "workday cannot be null");
@@ -81,7 +93,7 @@ public class WorkdayService {
 	 */
 	public List<Appointment> possibleSlotsOn(Workday day, ServiceType type){
 		List<Appointment> possible = new ArrayList<>();
-		for(LocalDateTime time = day.getBeginning(); time.isBefore(day.getEnd()); time.plusMinutes(type.getDuration())){
+		for(LocalDateTime time = day.getBeginning(); time.isBefore(day.getEnd()); time = time.plusMinutes(type.getDuration())){
 			possible.add(new Appointment().setService(type).setBeginning(time).setWorkday(day));
 		}
 		for(Appointment existing : day.getAppointments())
