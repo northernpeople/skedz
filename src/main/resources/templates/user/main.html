@@ -17,8 +17,7 @@
     <div class="collapsible-body purple lighten-1">
     	<ul  class="collapsible" data-collapsible="accordion">
 	    	<li th:each="wd : ${workdays}">
-	    	<!-- th:text="${#dates.format(product.availableFrom, 'dd-MMM-yyyy')}" -->
-			      <div th:text="|${wd.beginning.toLocalDate()}  (${wd.beginning.toLocalTime()} - ${wd.end.toLocalTime()})|" 
+			      <div th:text="|${wd.getBeginning().getDayOfWeek()}, ${wd.beginning.toLocalDate()}  (${wd.beginning.toLocalTime()} - ${wd.end.toLocalTime()})|" 
 			      class="collapsible-header"></div>
 			      <div class="collapsible-body">
 			      	<a class="btn red" th:href="@{/user/delete_workday/{id}(id=${wd.id})}">cancell</a>
@@ -28,26 +27,31 @@
 		   	 	<div class="collapsible-header"><i class="material-icons">add_circle</i>Add day</div>
 		      	<div class="collapsible-body grey lighten-3">
 		      		<form  action="#" th:action="@{/user/create_workday}" th:object="${workday}" method="post">
-			      		<div><input type="text" th:field="*{beginning}"  placeholder="beginning" /></div>
-			      		
-			      		<span class="" th:if="${#fields.hasErrors('beginning')}">
-							<ul>
-								<li class="chip red" th:each="err : ${#fields.errors('beginning')}" th:text="${err}">err</li>
-							</ul>
-						</span>
+			      		<div class="row">
+			      			<div class="col s4">
+					      		<input type="text" th:field="*{beginning}" placeholder="beginning" />
+					      		
+					      		<span class="" th:if="${#fields.hasErrors('beginning')}">
+									<ul>
+										<li class="chip red" th:each="err : ${#fields.errors('beginning')}" th:text="${err}">err</li>
+									</ul>
+								</span>
+							</div>
+							<div class="col s4">
+								<input type="text" th:field="*{end}"  placeholder="end" />
+								
+					      		<span class="" th:if="${#fields.hasErrors('end')}">
+									<ul>
+										<li class="chip red" th:each="err : ${#fields.errors('end')}" th:text="${err}">err</li>
+									</ul>
+								</span>
+							</div>
 						
-						<div><input type="text" th:field="*{end}"  placeholder="end" /></div>
-			      		
-			      		<span class="" th:if="${#fields.hasErrors('end')}">
-							<ul>
-								<li class="chip red" th:each="err : ${#fields.errors('end')}" th:text="${err}">err</li>
-							</ul>
-						</span>
-						
-			      		<div>
-			      			<input class="btn green" type="submit" value="Submit" />
-			      			<a class="btn red" th:href="@{/user/main}">cancel</a>
-			      			
+				      		<div class="col s4">
+				      			<input class="btn green" type="submit" value="Add" />
+				      			<a class="btn red" th:href="@{/user/main}">cancel</a>
+				      			
+				      		</div>
 			      		</div>
 		      		</form>
 		      	</div>
@@ -57,42 +61,7 @@
     </div>
     </li>
   
-    <!-- <li>
-      <div class="collapsible-header"><i class="material-icons">face</i>Users</div>
-      <div class="collapsible-body amber accent-3">
-	      <ul th:if="${! #sets.isEmpty(users)}" class="collapsible" data-collapsible="accordion">
-			<li th:each="u : ${users}">
-		      <div th:text="| ${u.username} ${u.role} |" class="collapsible-header"></div>
-		      <div class="collapsible-body"><span>
-		      	<a class="btn red" th:href="@{/admin/reset_pass_user/{id}(id=${u.id})}">reset password</a>
-		      	<a class="btn red" th:href="@{/admin/delete_user/{id}(id=${u.id})}">delete</a>
-		      	</span></div>
-		    </li>
-		    <li>
-		   	 	<div class="collapsible-header"><i class="material-icons">add_circle</i>Add user</div>
-		      	<div class="collapsible-body grey lighten-3">
-		      		<form  action="#" th:action="@{/admin/createuser}" th:object="${user}" method="post">
-			      		<div><input type="text" th:field="*{username}"  placeholder="email" /></div>
-			      		
-			      		<span class="" th:if="${#fields.hasErrors('username')}">
-							<ul>
-								<li class="chip red" th:each="err : ${#fields.errors('username')}" th:text="${err}">err</li>
-							</ul>
-						</span>
-						
-			      		<div>
-			      			<input class="btn red" type="submit" value="Submit" />
-			      			<a class="btn red" th:href="@{/admin/main}">cancel</a>
-			      			
-			      		</div>
-		      		</form>
-		      		
-		      	</div>
-		    </li>
-		</ul>
-      </div>
-    </li>
- -->
+    
  	<li>
       <div class="collapsible-header"><i class="material-icons">grain</i>Services</div>
       <div class="collapsible-body blue">
@@ -124,7 +93,15 @@
           	
 			
 		
-	
+	<script type="text/javascript">
+							$(function(){
+								$('*[name=beginning]').appendDtpicker({"minuteInterval": 15, "futureOnly": true});
+							});
+				
+							$(function(){
+								$('*[name=end]').appendDtpicker({"minuteInterval": 15, "futureOnly": true});
+							});
+						</script>
 				
 	</section>
 </html>

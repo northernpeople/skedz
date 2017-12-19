@@ -39,6 +39,10 @@ public class User {
 	
 	@RequestMapping(value = "/create_workday", method = RequestMethod.POST)
 	public String createWorkday(@Valid @ModelAttribute("workday") Workday day, RedirectAttributes model, Principal p){
+		if(day.getBeginning().isAfter(day.getEnd())){
+			model.addFlashAttribute("messages", Arrays.asList("start must be before the end"));
+			return "redirect:/user/main";
+		}
 		day.setUser(currentUser(p));
 		if(wdService.anyOverlaps(day)){
 			model.addFlashAttribute("messages", Arrays.asList("Day overlaps with existing days"));
@@ -49,7 +53,11 @@ public class User {
 			return "redirect:/user/main";
 		}
 		wdService.createWorkday(day);
-		model.addFlashAttribute("messages", Arrays.asList("Day added"));
+		model.addFlashAttribute("messages", Arrays.asList( 
+				"Clients can now book appointments between " +day.getBeginning().toLocalTime()
+				+ " and "+ day.getEnd().toLocalTime() 
+				+ " on " + day.getBeginning().toLocalDate(),
+				"Day added"));
 
 		return "redirect:/user/main";
 	}

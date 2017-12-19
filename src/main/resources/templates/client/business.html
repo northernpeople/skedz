@@ -1,0 +1,18 @@
+<html layout:decorator="client/layout/base">
+	<section layout:fragment="content">
+		<h2  th:text="|${business.name} services:|"></h2>
+		
+		
+		
+		  <ul class="collapsible" data-collapsible="accordion" >
+		    <li th:each="s : ${business.servicesProvided}">
+		      <div class="collapsible-header"><i class="material-icons">face</i>
+		      <span th:text="|${s.name}, duration: ${s.duration}|" ></span>
+		      </div>
+		      <div class="collapsible-body"><span class='btn'>book now</span></div>
+		    </li>
+		  </ul>
+  
+		
+	</section>
+</html>

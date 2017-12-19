@@ -49,6 +49,10 @@ public class BusinessService {
 		return bRepo.saveAndFlush(b);
 	}
 	
+	public Business businessById(UUID bid){
+		return bRepo.findOne(bid);
+	}
+	
 	public ServiceType byId(UUID id){
 		return stRepo.findOne(id);
 	}

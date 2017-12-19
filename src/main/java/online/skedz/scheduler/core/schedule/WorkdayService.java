@@ -53,11 +53,10 @@ public class WorkdayService {
 		Assert.notNull(day.getId(), "workday must have id");
 		wdRepo.delete(day);
 	}
-	
-	
+		
 	public List<Workday> getUpcomingWorkdaysOf(User u){
 		return getAllWorkdaysOf(u).stream()
-				.filter( d -> d.getBeginning().isAfter(LocalDateTime.now()))
+				.filter( d -> d.getEnd().isAfter(LocalDateTime.now()))
 				.collect(Collectors.toList());
 	}
 	public List<Workday> getAllWorkdaysOf(User u){
