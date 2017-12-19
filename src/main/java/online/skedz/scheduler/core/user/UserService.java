@@ -138,5 +138,9 @@ public class UserService implements UserDetailsService{
 		
 	}
 
+	public List<User> findByServicesProvidedId(UUID serviceTypeId) {
+		return userRepo.findByServicesProvidedId(serviceTypeId);
+	}
+
 	
 }

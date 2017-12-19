@@ -6,20 +6,21 @@
       			<div class="card blue">
       			
       			 	 <div class="card-content white-text">
-              			<span class="card-title"  th:text="|${business.name} services:|" >Card Title</span>
+              			<span class="card-title"  th:text="|${service.name} providers:|" >Card Title</span>
 
 
 			         </div>
 			        <div class="card-content">
 			          <p>
 			          <ul class="collapsible" data-collapsible="accordion" >
-					    <li th:each="s : ${business.servicesProvided}">
+					    <li th:each="p : ${providers}">
 					      <div class="collapsible-header">
 					      	<i class="material-icons">face</i>
-					      	<span th:text="|${s.name}, duration: ${s.duration}|" ></span>
+					      	<span th:text="${p.username}" ></span>
 					      </div>
 					      <div class="collapsible-body">
-					      	<a class="btn red" th:href="@{/client/book/{id}(id=${s.id})}">book</a>
+					      	<a class="btn red" th:href="@{/client/book_provider/{pid}/{sid}(pid=${p.id}, sid=${service.id})}" 
+					      		th:text="|book with ${p.username}|"></a>
 						  </div>
 					    </li>
 					  </ul>

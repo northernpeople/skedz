@@ -1,6 +1,7 @@
 package online.skedz.scheduler.core.schedule;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import online.skedz.scheduler.core.business.ServiceType;
 import online.skedz.scheduler.core.schedule.repo.WorkdayRepo;
 import online.skedz.scheduler.core.user.User;
 
@@ -35,6 +37,10 @@ public class WorkdayService {
 			}
 		}
 		return false;
+	}
+	
+	public Workday byId(UUID id){
+		return wdRepo.findOne(id);
 	}
 	
 	public Workday aNewDayLikeLastOne(User u){
@@ -64,6 +70,24 @@ public class WorkdayService {
 				.sorted( (a, b) -> a.getEnd().compareTo(b.getEnd()))
 				.distinct()
 				.collect(Collectors.toList());
+	}
+	
+
+	/**
+	 * Calculates all possible appointments that can still be booked on that day.
+	 * @param day
+	 * @param type
+	 * @return
+	 */
+	public List<Appointment> possibleSlotsOn(Workday day, ServiceType type){
+		List<Appointment> possible = new ArrayList<>();
+		for(LocalDateTime time = day.getBeginning(); time.isBefore(day.getEnd()); time.plusMinutes(type.getDuration())){
+			possible.add(new Appointment().setService(type).setBeginning(time).setWorkday(day));
+		}
+		for(Appointment existing : day.getAppointments())
+			possible.removeIf(p -> existing.overlapsWith(p));
+			
+		return possible;
 	}
 
 	public void deleteWorkday(UUID workdayId) {

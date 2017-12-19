@@ -1,5 +1,6 @@
 package online.skedz.scheduler.core.schedule;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -30,8 +31,21 @@ public class Appointment {
 	@ManyToOne
 	private Workday workday;
 	
+	private LocalDateTime beginning;
+	
+	LocalDateTime getEnd(){
+		return beginning.plusMinutes(service.getDuration());
+	}
+	
 	@OneToOne
 	private ServiceType service;
+	
+	public boolean overlapsWith(Appointment other){
+		if(this.equals(other)) return true;
+		if(this.beginning.isBefore(other.getBeginning()) && this.getEnd().isAfter(other.getBeginning())) return true;
+		if(this.getEnd().isAfter(other.getBeginning()) && this.getEnd().isBefore(other.getEnd())) return true;
+		return false;
+	}
 	
 	@PrePersist
 	void init(){

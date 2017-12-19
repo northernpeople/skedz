@@ -33,7 +33,7 @@ public class Workday {
 	@ManyToOne
 	private User user;
 	
-	@OneToMany(mappedBy="workday")
+	@OneToMany(mappedBy="workday", fetch = FetchType.EAGER)
 	private Set<Appointment> appointments = new HashSet<>();
 	
 	public boolean overlapsWith(Workday day){
@@ -42,6 +42,7 @@ public class Workday {
 		if(this.getEnd().isAfter(day.getBeginning()) && this.getEnd().isBefore(day.getEnd())) return true;
 		return false;
 	}
+	
 	
 	@PrePersist
 	void init(){

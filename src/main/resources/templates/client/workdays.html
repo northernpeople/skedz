@@ -6,21 +6,19 @@
       			<div class="card blue">
       			
       			 	 <div class="card-content white-text">
-              			<span class="card-title"  th:text="|${business.name} services:|" >Card Title</span>
-
-
+              			<span class="card-title" th:text="${service.name}" >Book</span>
 			         </div>
 			        <div class="card-content">
 			          <p>
 			          <ul class="collapsible" data-collapsible="accordion" >
-					    <li th:each="s : ${business.servicesProvided}">
+					    <li th:each="s : ${slots}">
 					      <div class="collapsible-header">
-					      	<i class="material-icons">face</i>
-					      	<span th:text="|${s.name}, duration: ${s.duration}|" ></span>
+					      	<i class="material-icons">schedule</i>
+					      	<span th:text="${s.beginning}" ></span>
 					      </div>
 					      <div class="collapsible-body">
-					      	<a class="btn red" th:href="@{/client/book/{id}(id=${s.id})}">book</a>
-						  </div>
+<!-- 						      <a class="btn red" th:href="@{/client/book_slots/{did}/{sid} (did=${wd.id}, sid=${service.id})}">see slots</a>
+ -->						  </div>
 					    </li>
 					  </ul>
 					  </p>
