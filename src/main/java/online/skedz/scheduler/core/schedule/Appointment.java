@@ -35,9 +35,12 @@ public class Appointment {
 	
 	private LocalDateTime created;
 	private LocalDateTime confirmed = LocalDateTime.MIN;
+	
+	private String clientName;
+	private String clientEmail;
 
 
-	public void confirm(){
+	public void verify() {
 		this.confirmed = LocalDateTime.now();
 	}
 	
@@ -47,6 +50,8 @@ public class Appointment {
 	
 	@OneToOne
 	private ServiceType service;
+
+	private UUID verificationCode;
 	
 	public boolean overlapsWith(Appointment other){
 		if(this.equals(other)) return true;
@@ -57,6 +62,7 @@ public class Appointment {
 	
 	@PrePersist
 	void init(){
+		this.verificationCode = UUID.randomUUID();
 		this.id = UUID.randomUUID();
 		created = LocalDateTime.now();
 	}

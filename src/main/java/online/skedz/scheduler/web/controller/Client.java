@@ -12,11 +12,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import online.skedz.scheduler.core.business.BusinessService;
 import online.skedz.scheduler.core.schedule.Appointment;
@@ -24,6 +26,7 @@ import online.skedz.scheduler.core.schedule.WorkdayService;
 import online.skedz.scheduler.core.service.email.EmailService;
 import online.skedz.scheduler.core.user.UserService;
 import online.skedz.scheduler.web.command.ChooseSlot;
+import online.skedz.scheduler.web.command.ClientConfirmEmail;
 
 @Controller
 @RequestMapping("/client")
@@ -99,8 +102,31 @@ public class Client {
 		
 		requested = wdService.createAppointment(requested);
 		model.addAttribute("messages", Arrays.asList("Appointment will be held for 10 minutes, please confirm your information"));
-		
+		model.addAttribute("clientEmail", new ClientConfirmEmail().setAppointmentId(requested.getId()));
 		return "client/details_form";
+	}
+		
+	@RequestMapping(value = "/confirm_email", method = RequestMethod.POST)
+	public String confirmSlot(ClientConfirmEmail clientProfile){
+		Appointment requested = wdService.appointmentById(clientProfile.getAppointmentId());
+		requested.setClientEmail(clientProfile.getEmail());
+		requested.setClientName(clientProfile.getName());
+		wdService.save(requested);
+		emailService.send(clientProfile.getEmail(), 
+				requested.getService().getName()
+				+" on " + requested.getBeginning(),
+				"Please follow this link: "
+				+ "http://localhost:8080/client/verifyEmail/"+requested.getVerificationCode());
+		return "client/done";
+	}
+	
+	@GetMapping(value ="/verifyEmail/{verificationCode}")
+	public String verifyEmail(	@PathVariable("verificationCode") UUID verificationCode, Model model){ 
+		Appointment requested = wdService.appointmentByVerification(verificationCode);
+		requested.verify();
+		wdService.save(requested);
+		model.addAttribute("messages", Arrays.asList("Thank you for verifying your email", "Your appointment is booked", "We will remind you 24 hours before the appointment"));
+		return "client/thanks";
 	}
 	
 	

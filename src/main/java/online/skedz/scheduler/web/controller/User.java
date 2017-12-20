@@ -36,7 +36,6 @@ public class User {
 	@Autowired
 	WorkdayService wdService;
 	
-	
 	@RequestMapping(value = "/create_workday", method = RequestMethod.POST)
 	public String createWorkday(@Valid @ModelAttribute("workday") Workday day, RedirectAttributes model, Principal p){
 		if(day.getBeginning().isAfter(day.getEnd())){

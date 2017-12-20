@@ -24,6 +24,13 @@ public class WorkdayService {
 	@Autowired
 	AppointmentRepo apRepo;
 	
+	public Appointment appointmentById(UUID appointmentId){
+		return apRepo.getOne(appointmentId);
+	}
+	public Appointment appointmentByVerification(UUID verificationCode){
+		return apRepo.findOneByVerificationCode(verificationCode);
+	}
+	
 	public Appointment createAppointment(Appointment a){
 		Assert.notNull(a.getBeginning(), "begging time cannot be null");
 		Assert.notNull(a.getService(), "service type cannot be null");
@@ -104,5 +111,9 @@ public class WorkdayService {
 
 	public void deleteWorkday(UUID workdayId) {
 		wdRepo.delete(workdayId);
+	}
+	public Appointment save(Appointment requested) {
+		return apRepo.saveAndFlush(requested);
+		
 	}
 }
