@@ -8,7 +8,6 @@ import org.springframework.util.Assert;
 
 import online.skedz.scheduler.core.business.repo.BusinessRepo;
 import online.skedz.scheduler.core.business.repo.ServiceTypeRepo;
-import online.skedz.scheduler.core.user.User;
 
 @Service
 public class BusinessService {
