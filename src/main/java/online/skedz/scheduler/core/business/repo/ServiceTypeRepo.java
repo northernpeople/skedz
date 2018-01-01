@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import online.skedz.scheduler.core.business.ServiceType;
 
-public interface ServiceTypeRepo extends JpaRepository<ServiceType, UUID>{
-
-	
+public interface ServiceTypeRepo extends JpaRepository<ServiceType, UUID>{	
 }
