@@ -10,7 +10,6 @@ import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 @EnableScheduling
 @SpringBootApplication
-@EnableJpaRepositories(basePackages={"online.skeds.core"})
 public class SchedulerApplication {
 
 	public static void main(String[] args) {
