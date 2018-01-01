@@ -115,7 +115,7 @@ public class Client {
 		emailService.send(clientProfile.getEmail(), 
 				requested.getService().getName()
 				+" on " + requested.getBeginning(),
-				"Please follow this link: "
+				"Please follow this link to CONFIRM: "
 				+ "http://localhost:8080/client/verifyEmail/"+requested.getVerificationCode());
 		return "client/done";
 	}

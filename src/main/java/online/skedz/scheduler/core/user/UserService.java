@@ -20,8 +20,6 @@ import online.skedz.scheduler.core.business.Business;
 import online.skedz.scheduler.core.business.ServiceType;
 
 
-
-
 @Component
 public class UserService implements UserDetailsService{
 

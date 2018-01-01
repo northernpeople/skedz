@@ -1,5 +1,7 @@
 package online.skedz.scheduler.web.controller;
 
+import java.util.Arrays;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,7 @@ public class Register{
 		}
 		
 		if (userService.usernameTaken(user)) {
-			errors.rejectValue("username", "Match", "This username is taken.");
+			model.addAttribute("messages", Arrays.asList("Email already in use"));
 			model.addAttribute("registration_request", registerRequest);
 			return "register/form";
 		}

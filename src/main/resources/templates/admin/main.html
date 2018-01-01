@@ -1,6 +1,6 @@
 <html layout:decorator="layout/base">
 	<section layout:fragment="content">		
-        <h2 th:text="${current_user.business.id}"></h2>
+        <p th:text="|http://localhost:8080/client/business/${current_user.business.id}|"></p>
 
 
 <ul class="collapsible popout">
