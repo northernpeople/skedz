@@ -10,61 +10,31 @@
 	<li>
 	<div class="collapsible-header active"><i class="material-icons">face</i>Appointments</div>
     <div class="collapsible-body amber accent-3">
-    	<ul  class="collapsible" data-collapsible="accordion">
-    	
-    		<span th:each="wd : ${workdays}" >
-    			
-    						    			<span th:text="${wd.beginning}"></span>
-    			
-    			
-    			<ul  class="collapsible" data-collapsible="accordion"  >
-    			
-			    	<li  th:each="app : ${wd.appointments}" >
+    
+   			<span class="chip green" th:if="${ #sets.isEmpty(appointments)}">
+    					No appointments found, add workdays and services!
+    		</span>
+    		
+    			<ul  class="collapsible" data-collapsible="accordion"  th:if="${! #sets.isEmpty(appointments)}">
+    				
+			    	<li  th:each="app : ${appointments}" >
 			    		  <div
 			    		  	class="collapsible-header"
-			    			th:text="|${app.beginning.toLocalTime()} ${app.service.name} with ${app.clientName}|"></div>
+			    			th:text="|
+			    			${app.beginning.toLocalDate()} -
+			    			${app.beginning.toLocalTime()} - 
+			    			${app.service.name} 
+			    			with 
+			    			${app.clientName}
+			    			(${app.clientEmail}) 
+			    			verified?  ${app.verified()}
+			    			|"></div>
 			    			
 					      <div class="collapsible-body">
-					      	<a class="btn red" >cancell</a>
+					      	<a class="btn red" th:href="@{/user/cancell_appointment/{id}(id=${app.id})}">cancel this appointment</a>
 					      </div>
 					</li>
 				</ul>
-			</span>
-			
-			<li>
-		   	 	<div class="collapsible-header"><i class="material-icons">add_circle</i>Manually add appointment</div>
-		      	<div class="collapsible-body grey lighten-3">
-		      		<form  action="#" th:action="@{/user/create_workday}" th:object="${workday}" method="post">
-			      		<div class="row">
-			      			<div class="col s4">
-					      		<input type="text" th:field="*{beginning}" placeholder="beginning" />
-					      		
-					      		<span class="" th:if="${#fields.hasErrors('beginning')}">
-									<ul>
-										<li class="chip red" th:each="err : ${#fields.errors('beginning')}" th:text="${err}">err</li>
-									</ul>
-								</span>
-							</div>
-							<div class="col s4">
-								<input type="text" th:field="*{end}"  placeholder="end" />
-								
-					      		<span class="" th:if="${#fields.hasErrors('end')}">
-									<ul>
-										<li class="chip red" th:each="err : ${#fields.errors('end')}" th:text="${err}">err</li>
-									</ul>
-								</span>
-							</div>
-						
-				      		<div class="col s4">
-				      			<input class="btn green" type="submit" value="Add" />
-				      			<a class="btn red" th:href="@{/user/main}">cancel</a>
-				      			
-				      		</div>
-			      		</div>
-		      		</form>
-		      	</div>
-		    </li>
-    	</ul>
     </div>
     </li>
     

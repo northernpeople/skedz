@@ -48,6 +48,10 @@ public class Appointment {
 		return beginning.plusMinutes(service.getDuration());
 	}
 	
+	public boolean verified(){
+		return ! confirmed.equals(LocalDateTime.MIN);
+	}
+	
 	@OneToOne
 	private ServiceType service;
 

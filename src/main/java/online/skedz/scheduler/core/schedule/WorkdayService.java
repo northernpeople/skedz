@@ -116,4 +116,9 @@ public class WorkdayService {
 		return apRepo.saveAndFlush(requested);
 		
 	}
+	
+	public void cancelAppointment(UUID appointmentId) {
+		apRepo.delete(appointmentId);
+		
+	}
 }

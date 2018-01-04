@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import online.skedz.scheduler.core.business.BusinessService;
+import online.skedz.scheduler.core.schedule.Appointment;
 import online.skedz.scheduler.core.schedule.Workday;
 import online.skedz.scheduler.core.schedule.WorkdayService;
+import online.skedz.scheduler.core.service.email.EmailService;
 import online.skedz.scheduler.core.user.UserService;
 
 
@@ -35,6 +38,10 @@ public class User {
 	
 	@Autowired
 	WorkdayService wdService;
+	
+	@Autowired
+	EmailService emailService;
+	
 	
 	@RequestMapping(value = "/create_workday", method = RequestMethod.POST)
 	public String createWorkday(@Valid @ModelAttribute("workday") Workday day, RedirectAttributes model, Principal p){
@@ -69,6 +76,24 @@ public class User {
 		model.addFlashAttribute("messages", Arrays.asList("Day deleted"));
 		return "redirect:/user/main";
 	}
+	
+	@RequestMapping(value = "/cancell_appointment/{id}", method = RequestMethod.GET)
+	public String cancelAppointment(@PathVariable("id") UUID appointmentId, RedirectAttributes model, Principal p){
+		Appointment cancelled = wdService.appointmentById(appointmentId);
+		wdService.cancelAppointment(appointmentId);
+		emailService.send(cancelled.getClientEmail(), 
+				"Hi " + cancelled.getClientName(), 
+				"Your appointment: "
+				+ cancelled.getService().getName()
+				+ " on "
+				+ cancelled.getBeginning().toLocalDate()
+				+ " / "
+				+ cancelled.getBeginning().toLocalTime()
+				+ " has been CANCELLED. Please rebook or contact service provider for more information.");
+		model.addFlashAttribute("messages", Arrays.asList("Appointment cancelled", "Notification email sent"));
+		return "redirect:/user/main";
+	}
+	
 	private boolean dayBelongsToUser(UUID workdayId, Principal p) {
 		return wdService.getAllWorkdaysOf(currentUser(p)).stream().filter(d -> d.getId().equals(workdayId)).findFirst().isPresent();
 	}
@@ -93,6 +118,12 @@ public class User {
 		m.addAttribute("current_user", currentUser(p));
 		m.addAttribute("workday", wdService.aNewDayLikeLastOne(currentUser(p)));
 		m.addAttribute("workdays", wdService.getUpcomingWorkdaysOf(currentUser(p)));
+		m.addAttribute("appointments", 
+				wdService.getUpcomingWorkdaysOf(currentUser(p))
+				.stream()
+				.flatMap(wd -> wd.getAppointments().stream())
+				.collect(Collectors.toSet()));
+
 		return "user/main";	
 	}
 
