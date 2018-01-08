@@ -27,7 +27,7 @@
 			    			with 
 			    			${app.clientName}
 			    			(${app.clientEmail}) 
-			    			verified?  ${app.verified()}
+			    			verified?  ${ app.verified()? 'Yes' : 'No'}
 			    			|"></div>
 			    			
 					      <div class="collapsible-body">
