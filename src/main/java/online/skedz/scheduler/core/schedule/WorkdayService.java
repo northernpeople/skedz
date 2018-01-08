@@ -112,6 +112,7 @@ public class WorkdayService {
 	public void deleteWorkday(UUID workdayId) {
 		wdRepo.delete(workdayId);
 	}
+	
 	public Appointment save(Appointment requested) {
 		return apRepo.saveAndFlush(requested);
 		
@@ -119,6 +120,12 @@ public class WorkdayService {
 	
 	public void cancelAppointment(UUID appointmentId) {
 		apRepo.delete(appointmentId);
-		
+	}
+	
+	public List<Appointment> allAppointments(){
+		return apRepo.findAll();
+	}
+	public void deleteAppointment(Appointment a) {
+		apRepo.delete(a);
 	}
 }

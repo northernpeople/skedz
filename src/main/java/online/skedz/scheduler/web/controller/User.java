@@ -72,8 +72,20 @@ public class User {
 		if(! dayBelongsToUser(workdayId, p)){
 			return "redirect:/user/main";
 		}
+		for(Appointment cancelled : wdService.byId(workdayId).getAppointments()){
+			wdService.cancelAppointment(cancelled.getId());
+			emailService.send(cancelled.getClientEmail(), 
+					"Hi " + cancelled.getClientName(), 
+					"Your appointment: "
+					+ cancelled.getService().getName()
+					+ " on "
+					+ cancelled.getBeginning().toLocalDate()
+					+ " / "
+					+ cancelled.getBeginning().toLocalTime()
+					+ " has been CANCELLED. Please rebook or contact service provider for more information.");
+			model.addFlashAttribute("messages", Arrays.asList("All appointments cancelled", "Notification emails sent to customers"));
+		}
 		wdService.deleteWorkday(workdayId);
-		model.addFlashAttribute("messages", Arrays.asList("Day deleted"));
 		return "redirect:/user/main";
 	}
 	

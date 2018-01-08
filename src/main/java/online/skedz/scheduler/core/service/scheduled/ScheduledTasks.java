@@ -12,6 +12,8 @@ import online.skedz.scheduler.core.business.Business;
 import online.skedz.scheduler.core.business.BusinessService;
 import online.skedz.scheduler.core.business.ServiceType;
 import online.skedz.scheduler.core.business.repo.ServiceTypeRepo;
+import online.skedz.scheduler.core.schedule.Appointment;
+import online.skedz.scheduler.core.schedule.WorkdayService;
 import online.skedz.scheduler.core.user.Role;
 import online.skedz.scheduler.core.user.User;
 import online.skedz.scheduler.core.user.UserService;
@@ -28,6 +30,9 @@ public class ScheduledTasks {
 	
 	@Autowired
 	ServiceTypeRepo stRepo;
+	
+	@Autowired
+	WorkdayService wdService;
 	
 	@Scheduled(fixedRate = Long.MAX_VALUE)
 	public void setUpTestAccount(){
@@ -52,8 +57,16 @@ public class ScheduledTasks {
 		for(User u : all){
 			//if account is disabled and was created longer than a week ago from today's date
 		if(!u.isEnabled() && u.getCreatedDate().plusWeeks(1L).isBefore(LocalDateTime.now())){
-				System.out.println("Deleting user: " + u);
 				userService.delete(u.getId());
+			}
+		}
+	}
+	
+	@Scheduled(initialDelay = 5000, fixedRate = 60000)
+	public void deleteUnverifiedAppointments(){
+		for(Appointment a : wdService.allAppointments()){
+			if(! a.verified() && a.getCreated().plusMinutes(10).isBefore(LocalDateTime.now())){
+				wdService.deleteAppointment(a);
 			}
 		}
 	}
