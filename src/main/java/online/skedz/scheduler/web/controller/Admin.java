@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -41,6 +42,8 @@ public class Admin {
 	@Autowired
 	BusinessService bService;
 	
+	@Value("${server_url}")
+	private String serverUrl;
 	
 	@RequestMapping(value = "/reset_pass_user/{id}", method = RequestMethod.GET)
     public String resetPassword (@PathVariable("id") UUID id, RedirectAttributes model) {
@@ -85,7 +88,8 @@ public class Admin {
 		emailService.send(candidate.getUsername(), 
 				"You have been invited to " + current.getBusiness().getName(), 
 				"Please follow this link: "
-				+ "http://localhost:8080/verifyEmail/"+candidate.getVerificationCode()
+				+ emailService.getServerUrl()
+				+ "/verifyEmail/"+candidate.getVerificationCode()
 				+ " and use this temporary password: "+ tempPassword);
 		
 		model.addFlashAttribute("messages", Arrays.asList("Invitation sent!"));
@@ -126,6 +130,7 @@ public class Admin {
 		m.addAttribute("service_types", current.getBusiness().getServicesProvided());
 		m.addAttribute("user", new InviteUser());
 		m.addAttribute("users", bService.getOneWithTeam(current.getBusiness().getId()).getTeam());
+		m.addAttribute("service_url", serverUrl);
 		return "admin/main";
 	}
 	

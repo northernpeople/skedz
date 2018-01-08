@@ -106,7 +106,6 @@ public class User implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {	
-		System.out.println(emailVerified.isBefore(LocalDateTime.now()));
 		return emailVerified.isBefore(LocalDateTime.now());
 	}
 }

@@ -116,7 +116,8 @@ public class Client {
 				requested.getService().getName()
 				+" on " + requested.getBeginning(),
 				"Please follow this link to CONFIRM: "
-				+ "http://localhost:8080/client/verifyEmail/"+requested.getVerificationCode());
+				+ emailService.getServerUrl()
+				+ "/client/verifyEmail/"+requested.getVerificationCode());
 		return "client/done";
 	}
 	

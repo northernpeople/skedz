@@ -14,8 +14,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import lombok.Getter;
+
 @Service
 @Profile("prod")
+@Getter
 public class EmailServiceGmail implements EmailService {
 
 
@@ -24,6 +27,9 @@ private String email;
 	
 @Value("${password}")
 private String password;
+
+@Value("${server_url}")
+private String serverUrl;
 
 	@Async
 	public void send(String to, String subject, String text) {

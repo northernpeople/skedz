@@ -74,7 +74,9 @@ public class Register{
 		emailService.send(user.getUsername(), 
 				"Welcome to remindeme app", 
 				"Please follow this link: "
-				+ "http://localhost:8080/verifyEmail/"+user.getVerificationCode()
+				+ emailService.getServerUrl()
+				+ "/verifyEmail/"
+				+ user.getVerificationCode()
 				+ " this link will expire in 7 days.");
 		return "register/email_sent";
 	}
